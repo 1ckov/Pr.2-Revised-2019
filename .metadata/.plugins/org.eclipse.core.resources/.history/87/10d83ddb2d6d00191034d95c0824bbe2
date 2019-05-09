@@ -1,0 +1,51 @@
+package uebung3Revised;
+
+public interface Hashtable <K,V> {
+	/**
+	 * Put's a key, value pair in the table;
+	 * @param key - 
+	 * @param value -
+	 * @return - Null if succesefull 
+	 */
+	V put(K key,V value);
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
+	V get(K key);
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	boolean contains(V value);
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
+	boolean containsKey(K key);
+	/**
+	 * 
+	 * @return
+	 */
+	boolean isEmpty();
+	/**
+	 * 
+	 * @return
+	 */
+	int size();
+	/**
+	 * 
+	 * @return
+	 */
+	Hashtable<K,V> clear();
+	/**
+	 * 
+	 * @return
+	 */
+	boolean remove();
+	
+
+}

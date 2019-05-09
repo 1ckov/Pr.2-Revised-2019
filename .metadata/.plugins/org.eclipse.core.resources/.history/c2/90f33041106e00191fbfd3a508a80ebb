@@ -1,0 +1,127 @@
+package uebung3Revised;
+
+public class MyHashTable<K extends String,V extends Element> implements HashTable<String, Element> {
+	private static final int DEFAULT_SIZE = 8;
+	private int size;
+	private int numberOfElements;
+	private int numberOfCollisions;
+	private Probing probing;
+	private HashItem<String,Element> table[];
+	
+	@SuppressWarnings("unchecked")
+	public MyHashTable(int size,Probing probing) {
+		this.size = size;
+		this.table = new HashItem[this.size];
+		this.probing = probing;
+		numberOfElements = 0;
+		numberOfCollisions = 0;
+	}
+	
+	public MyHashTable(int size) {
+		this(size,new LinearProbing());
+	}
+	
+	public MyHashTable() {
+		this(DEFAULT_SIZE, new LinearProbing());
+	}
+	
+	@Override
+	public Element put(String key, Element value) {
+		if(numberOfElements == size || (numberOfElements / size * 100) > 70) {
+			reHash();
+		}
+		
+		HashItem<String,Element> newItem = new HashItem<>(key, value);
+		int hash = newItem.hashCode();
+		int index = hash % size;
+		
+		put(newItem,index);
+		
+		if(table[index] == null) {
+			table[index] = newItem;
+			numberOfElements++;
+			
+		}
+		
+		return null;
+	}
+
+	private void reHash() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Element get(String key) {
+		
+		return null;
+	}
+
+	@Override
+	public boolean contains(Element value) {
+		if(isEmpty()) {
+			return false;
+		}
+		
+		for(int i = 0; i < size(); i++) {
+			if(value.compareTo(table[i].getValue()) == 0) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean containsKey(String key) {
+		HashItem<String,Element> toBeFound = new HashItem<>(key,null);
+		int pos = toBeFound.hashCode() % size();
+		startProbing(pos);
+		
+		for(int i = 0; i < size(); i++) {
+			
+			if(key.equals(table[pos].getKey())) {
+				return true;
+			}
+		
+			pos = probing.getNum();
+		
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return numberOfElements == 0;
+	}
+
+	@Override
+	public int size() {
+		return size;
+	}
+
+	@Override
+	public HashTable<String, Element> clear() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	private Probing startProbing(int pos) {
+		if(this.probing instanceof LinearProbing) {
+			this.probing = new LinearProbing(size,pos);
+		}
+		else if(this.probing instanceof QuadraticProbing) {
+			this.probing = new QuadraticProbing(size,pos);
+		}
+		
+		probing.startProbing();
+	
+		return probing;
+	}
+
+}

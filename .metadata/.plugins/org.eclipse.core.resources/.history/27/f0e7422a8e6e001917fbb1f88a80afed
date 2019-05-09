@@ -1,0 +1,36 @@
+package uebung3Revised;
+
+public class QuadraticProbing implements Probing {
+	
+	private int size;
+	private int num;
+	private int pos;
+	
+	public QuadraticProbing(int size,int pos) {
+		this.size = size;
+		this.pos = pos;
+	}
+	
+	public QuadraticProbing() {
+		this(0,0);
+	}
+
+	@Override
+	public int nextNum() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNum() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void startProbing() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

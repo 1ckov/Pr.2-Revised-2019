@@ -1,0 +1,219 @@
+package uebung3Revised;
+
+@SuppressWarnings("rawtypes")
+public class MyHashTable<K extends Element,V extends Object> implements HashTable<K,V> {
+	private static final int DEFAULT_SIZE = 8;
+	private int size;
+	private int numberOfCollisions;
+	private Probing probing;
+	private HashItem<K,V> table[];
+	private int numberOfElements;
+	
+	
+	public int calculateFilling() {
+		int result = ((100 * numberOfElements) / (size * 100));
+		return result;
+	}
+	
+	public int getStat() {
+		return numberOfCollisions;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public MyHashTable(int size,Probing probing) {
+		this.size = size;
+		this.table = new HashItem[this.size];
+		this.probing = probing;
+		numberOfElements = 0;
+		numberOfCollisions = 0;
+	}
+	
+	public MyHashTable(int size) {
+		this(size,new LinearProbing());
+	}
+	
+	public MyHashTable() {
+		this(DEFAULT_SIZE, new LinearProbing());
+	}
+	
+	
+	@Override
+	public V put(K key, V value) {
+		if(numberOfElements == size || calculateFilling() > 75) {
+			reHash();
+		}
+		
+		HashItem<K,V> newItem = new HashItem<>(key, value);
+		int hash = newItem.hashCode();
+		int index = hash % size;
+		
+		return put(newItem,index);
+		
+		}
+	
+	private V put(HashItem <K, V> newItem) {
+		int hash = newItem.hashCode();
+		int index = hash % size;
+		
+		return put(newItem,index);
+	}
+
+	private V put(HashItem<K,V> newItem, int index) {
+		
+		if(table[index] == null) {
+			table[index] = newItem;
+			numberOfElements++;
+			return null;
+		}
+		
+		else if(table[index].isDeleted()) {
+			V toReturn = table[index].getValue();
+			table[index] = newItem;
+			numberOfElements++;
+			return toReturn;
+		}
+		
+		else if(table[index].getKey().equals(newItem.getKey())) {
+			V toReturn = table[index].getValue();
+			table[index] = newItem;
+			return toReturn;
+		}
+		
+		startProbing(index);
+		numberOfCollisions++;
+		return put(newItem,probing.getNum());
+		
+				
+	}
+
+	@SuppressWarnings("unchecked")
+	private void reHash() {
+		
+		int oldSize = size();
+		HashItem<K,V>[] oldTable = this.table;
+		
+		this.size = oldSize * 2;
+		this.table = new HashItem[this.size];
+		numberOfElements = 0;
+		numberOfCollisions = 0;
+		
+		for(int i = 0; i < oldSize; i++) {
+			if(oldTable[i] != null) {
+				put(oldTable[i]);
+			}
+		}
+		
+	}
+	@Override
+	public V get(K key) {
+		HashItem<K,V> toBeGoten = new HashItem<> (key,null);
+		int hashCode = toBeGoten.hashCode();
+		int index = hashCode % size();
+		startProbing(index);
+		
+		for(int i = 0; i < size(); i++) {
+		
+			if(table[index].getKey().equals(key)) {
+				return table[index].getValue();
+			
+			}
+			index = probing.getNum();
+			probing.nextNum();
+		
+		}
+		
+		return null;
+	}
+
+	@Override
+	public boolean contains(V value) {
+		if(isEmpty()) {
+			return false;
+		}
+		
+		for(int i = 0; i < size(); i++) {
+			if(table[i]!= null) {
+			if(value.equals(table[i].getValue())) {
+				return true;
+			}
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean containsKey(K key) {
+		HashItem<K,V> toBeFound = new HashItem<>(key,null);
+		int pos = toBeFound.hashCode() % size();
+		startProbing(pos);
+		
+		for(int i = 0; i < size(); i++) {
+			
+			if(key.equals(table[pos].getKey())) {
+				return true;
+			}
+		
+			pos = probing.getNum();
+		
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return numberOfElements == 0;
+	}
+
+	@Override
+	public int size() {
+		return size;
+	}
+
+	@Override
+	public HashTable<K,V> clear(HashTable<K,V> thisTable) {
+		thisTable = new MyHashTable<K,V>(thisTable.size(),thisTable.getProbing());
+		return thisTable;
+	}
+
+	@Override
+	public boolean remove(K key) {
+		if(containsKey(key) && !isEmpty()) {
+			HashItem<K,V> newItem = new HashItem<>(key,null);
+			int hashCode = newItem.hashCode();
+			int pos = hashCode % size();
+			startProbing(pos);
+			for(int i = 0; i < size(); i++) {
+				if(table[pos].getKey().equals(key)) {
+					table[pos].delete();
+					numberOfElements--;
+					return true;
+				}
+				pos = probing.getNum();
+				probing.nextNum();
+			}
+			
+		}
+		
+		return false;
+	}
+	
+	private void startProbing(int pos) {
+		if(this.probing instanceof LinearProbing) {
+			this.probing = new LinearProbing(size,pos);
+		}
+		else if(this.probing instanceof QuadraticProbing) {
+			this.probing = new QuadraticProbing(size,pos);
+		}
+		
+		probing.startProbing();
+	
+	}
+	
+	@Override
+	public Probing getProbing() {
+		return this.probing;
+	}
+
+}

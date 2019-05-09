@@ -1,0 +1,73 @@
+package uebung3Revised;
+
+public class MyHashTable<K,V> implements HashTable<K, V> {
+	private static final int DEFAULT_SIZE = 8;
+	private int size;
+	private int numberOfElements;
+	private int numberOfCollisions;
+	private Probing probing;
+	private HashItem<K,V> table[];
+	
+	@SuppressWarnings("unchecked")
+	public MyHashTable(int size,Probing probing) {
+		this.size = size;
+		this.table = new HashItem[size];
+		this.probing = probing;
+		numberOfElements = 0;
+		numberOfCollisions = 0;
+	}
+	
+	public  MyHashTable(int size) {
+		this(size,new LinearProbing());
+	}
+	
+
+	@Override
+	public V put(K key, V value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public V get(K key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean contains(V value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean containsKey(K key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public HashTable<K, V> clear() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(K key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}
