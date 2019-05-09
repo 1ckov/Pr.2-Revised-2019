@@ -1,0 +1,10 @@
+package uebung3Revised;
+
+public class SongsHashTable {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

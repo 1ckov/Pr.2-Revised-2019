@@ -1,0 +1,46 @@
+package uebung3Revised;
+
+public class StringElement implements Element<String>{
+	private String value;
+	
+	public StringElement(String value) {
+		this.value = value;
+	}
+	
+	@Override
+	public int compareTo(Element<String> other) {
+		this.value.compareTo();
+		return 0;
+	}
+
+	@Override
+	public void print() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getVal() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override 
+	public Element<String> clone() {
+		return null;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 0;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return false;
+	}
+	
+	public getElementValue() {
+		return this.value;
+	}
+
+}

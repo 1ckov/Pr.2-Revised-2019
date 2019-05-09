@@ -1,0 +1,41 @@
+package uebung3Revised;
+
+public class LinearProbing implements Probing {
+	
+	private int num;
+	private int size;
+	private int pos;
+	
+	public LinearProbing() {
+		this(0,0);
+	}
+	
+	public LinearProbing(int size, int pos) {
+		this.size = size;
+		this.pos = pos;
+	}
+
+	@Override
+	public int nextNum() {
+		num += 1;
+		if(num + pos == size) {
+			num = 0;
+			pos = 0;
+			return num;
+		}
+		return num;
+	}
+
+	@Override
+	public int getNum() {
+		return num + pos;
+	}
+
+	@Override
+	public void startProbing() {
+		num = 0;
+		nextNum();
+	}
+	
+
+}
