@@ -1,0 +1,10 @@
+1556803160598	Copy compilation units
+1556806368487	Rename type 'HashTable'
+1556837933338	Rename type 'Hashtable'
+1556839560477	Encapsulate field 'key'
+1556839567437	Encapsulate field 'value'
+1556840139879	Infer generic type arguments
+1556840661943	Infer generic type arguments
+1556930914704	Rename type variable 'V'
+1556930937359	Rename type variable 'K'
+1556976530403	Delete element

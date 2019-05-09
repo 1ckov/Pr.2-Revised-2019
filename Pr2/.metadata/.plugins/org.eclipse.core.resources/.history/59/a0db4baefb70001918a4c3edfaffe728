@@ -1,0 +1,50 @@
+package uebung3Revised;
+
+public class HashItem<K extends String, V extends Element> implements Comparable<String> {
+	
+	private boolean deleted = false;
+	private K key;
+	private V value;
+	
+	public HashItem(K key, V value) {
+		this.key = key;
+		this.value = value;
+	}
+	
+	public K getKey() {
+		return key;
+	}
+	public void setKey(K key) {
+		this.key = key;
+	}
+	public V getValue() {
+		return value;
+	}
+	public void setValue(V value) {
+		this.value = value;
+	}
+	@Override
+	public int hashCode() {
+		String toCalculate = key.toString();
+		int hash= 0;
+		int prime = 31;
+		for(int i = 0; i < toCalculate.length(); i++) {
+			hash += (prime * hash + toCalculate.charAt(i));
+		}
+		return hash;
+	}
+	public boolean delete() {
+		this.deleted = true;
+		return this.deleted;
+	}
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	@Override
+	public int compareTo(String thatKey) {
+		return this.key.compareTo(thatKey);
+	}
+
+}

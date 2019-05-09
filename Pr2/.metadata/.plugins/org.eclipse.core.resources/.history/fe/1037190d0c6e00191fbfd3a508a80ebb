@@ -1,0 +1,92 @@
+package uebung3Revised;
+
+public class MyHashTable<K extends String,V extends Element> implements HashTable<String, Element> {
+	private static final int DEFAULT_SIZE = 8;
+	private int size;
+	private int numberOfElements;
+	private int numberOfCollisions;
+	private Probing probing;
+	private HashItem<String,Element> table[];
+	
+	@SuppressWarnings("unchecked")
+	public MyHashTable(int size,Probing probing) {
+		this.size = size;
+		this.table = new HashItem[this.size];
+		this.probing = probing;
+		numberOfElements = 0;
+		numberOfCollisions = 0;
+	}
+	public MyHashTable(int size) {
+		this(size,new LinearProbing());
+	}
+	public MyHashTable() {
+		this(DEFAULT_SIZE, new LinearProbing());
+	}
+	@Override
+	public Element put(String key, Element value) {
+		if(numberOfElements == size || (numberOfElements / size * 100) > 70) {
+			reHash();
+		}
+		
+		HashItem<String,Element> newItem = new HashItem<>(key, value);
+		int hash = newItem.hashCode();
+		int index = hash % size;
+		
+		put(newItem,index);
+		
+		if(table[index] == null) {
+			table[index] = newItem;
+			numberOfElements++;
+			
+		}
+		
+		return null;
+	}
+
+	private void reHash() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Element get(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean contains(Element value) {
+		
+		return false;
+	}
+
+	@Override
+	public boolean containsKey(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public HashTable<String, Element> clear() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean remove(String key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

@@ -1,0 +1,5 @@
+package uebung3Revised;
+
+public class HashItem<K, V> {
+
+}

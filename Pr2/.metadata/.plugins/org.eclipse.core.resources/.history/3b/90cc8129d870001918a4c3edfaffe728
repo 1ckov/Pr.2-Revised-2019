@@ -1,0 +1,23 @@
+package uebung3Revised;
+
+public class StringElement implements Element{
+
+	@Override
+	public int compareTo(Element other) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void print() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Element getVal() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

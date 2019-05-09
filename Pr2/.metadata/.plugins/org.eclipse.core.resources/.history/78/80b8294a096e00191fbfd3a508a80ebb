@@ -1,0 +1,23 @@
+package uebung3Revised;
+
+public class LinearProbing implements Probing {
+
+	@Override
+	public int nextNum() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getNum() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void startProbing() {
+		// TODO Auto-generated method stub
+
+	}
+
+}
