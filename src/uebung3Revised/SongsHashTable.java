@@ -41,44 +41,64 @@ public class SongsHashTable {
 		return subStrings;
 	}
 	
-	public static void main(String[] args) {
-	    
-	    HashTable<Element,Song> songsTable = new MyHashTable<> (4,new QuadraticProbing());
-//	    HashTable songsTable = new HashTable (40, new LinearProbing(3,-1));
-//	    HashTable songsTable = new HashTable (1000);
-//		OrderedList list = new LinkedList();
-//		OrderedList list = new ArrayList();
+	public static Element[] returnArrayOfElementSongnames(String filename){
 		
-		String filename = MethodHandles.lookup().lookupClass().getResource("songs.txt").getPath();
-		String[] songs = MakeItSimple.readStringArray(filename);
-		System.out.println(songs.length);
+		String file = MethodHandles.lookup().lookupClass().getResource(filename).getPath();
+		String[] songs = MakeItSimple.readStringArray(file);
+		
+		Element[] toBeReturned = new StringElement[songs.length];
+		
+		int i = 0;
+		
+		for (String songString : songs) {
+			String[] parts = split(songString, ';');
+			
+			toBeReturned[i] = new StringElement (parts[0]);
+			i++;
+			
+		}
+		
+		return toBeReturned;
+		
+	}
+	
+	public static Song[] returnArrayOfSong(String filename) {
+		String file = MethodHandles.lookup().lookupClass().getResource(filename).getPath();
+		String[] songs = MakeItSimple.readStringArray(file);
+		
+		Song[] toBeReturned = new SongImplementation[songs.length];
+		
 		int j = 0;
 		
 		for (String songString : songs) {
-//			System.out.println(songString);
 			String[] parts = split(songString, ';');
 			String[] artists = new String[parts.length - 2];
 			for (int i = 2; i < parts.length; i++)
 				artists[i - 2] = parts[i];
 			
-			Element artist = new StringElement (artists[0]);
-			Element singleSong = new StringElement (parts[0]);
-			
 			Song song = new SongImplementation(parts[0], artists, parts[1]);
-//			System.out.println("Artist: "+ artist + "; hashCode= "+artist.hashCode());
-            j++;
-			System.out.println(songsTable.size() + " " + j);
-            
-			songsTable.put(singleSong, song);
-            
-//            if (songsTable.put(singleSong, song) != null) 
-//            	System.out.println ("doppelter Schlüssel: "+singleSong);  // insert songs in hash table
-//            songsTable.put(artist, song);  // insert artists in hash table
-//			list.insert(song);
-//			System.out.println(song);
-//			songsTable.printHT();
+//			
+			toBeReturned[j] = song;
+			j++;
 			
-//			System.exit(0);
+		}
+		
+		return toBeReturned;
+		
+	}
+	
+	public static void main(String[] args) {
+	    
+	    HashTable<Element,Song> songsTable = new MyHashTable<> (4,new QuadraticProbing());
+
+		Song[] songs = returnArrayOfSong("songs.txt");
+		Element[] songNames = returnArrayOfElementSongnames("songs.txt");
+		System.out.println(songs.length);
+		
+		for (int i = 0; i < songs.length; i++) {
+            
+			songsTable.put(songNames[i],songs[i]);
+            
 		}
 		System.out.println(songsTable.getStat());
 		System.out.println("Einträge in Hashtable: " + songsTable.size());

@@ -30,6 +30,7 @@ public class LinearProbing implements Probing {
 //			pos = (size  - keep) % size;
 //			
 //		}
+		//You can imagine this formula as a frog jumping to diffrent leaves.
 		num+=1;
 		sign*=-1;
 		pos = (pos + num*sign*prime) % size;
