@@ -4,12 +4,14 @@ public class InsertionSort implements Sort{
 
 	@Override
 	public Comparable[] sort(Comparable[] toSort) {
+		// start at position 1
 		for(int i = 1; i < toSort.length; i++) {
 			int j = i;
+			// we save our current Element
 			Comparable toInsert = toSort[i];
-			
-			while((j > 0) && toSort[j-1].compareTo(toInsert) < 0 ) {
-				toSort[j] = toSort[j-1];
+			//if we find a position fitting our current element or end up at the beggining we swap
+			while((j > 0) && toSort[j-1].compareTo(toInsert) >= 0 ) {
+				swapValue(j,j-1,toSort);
 				j--;
 				
 			}
@@ -30,7 +32,7 @@ public class InsertionSort implements Sort{
 
 	@Override
 	public void swapValue(int positionA, int positionB, Comparable[] array) {
-		
+		array[positionA] = array[positionB];
 	}
 	
 	

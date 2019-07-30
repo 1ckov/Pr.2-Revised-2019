@@ -1,19 +1,25 @@
 package uebung1Revised;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyBinaryTree<T extends Number> implements BinaryTree<T>, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8360165067755665376L;
 	private Node<T> root = null;
 
 	public List<T> asList() {
@@ -81,6 +87,17 @@ public class MyBinaryTree<T extends Number> implements BinaryTree<T>, Serializab
 
 	@Override
 	public boolean insert(String filename) {
+		File fileToLoadValueFrom = new File(filename);
+		if (fileToLoadValueFrom.exists()) {
+			try {
+				loadFromFileWithIntegers(filename);
+				return true;
+			}
+			catch(FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return false;
 	}
 
@@ -303,71 +320,163 @@ public class MyBinaryTree<T extends Number> implements BinaryTree<T>, Serializab
 	}
 
 	private void printLevelorder(Node<T> currentNode, int currentLevel) {
+
 		if (currentNode != null) {
+
 			if (currentLevel == 1) {
+
 				System.out.print(currentNode.getValue() + " ");
 			} else if (currentLevel > 1) {
+
 				printLevelorder(currentNode.getLeftChildNode(), currentLevel - 1);
+
 				printLevelorder(currentNode.getRightChildNode(), currentLevel - 1);
 			}
+
 		}
+
 	}
 
 	@Override
 	public BinaryTree<T> clone() {
+
 		BinaryTree<T> cloneTree = new MyBinaryTree<>();
+
 		cloneTree.addAll(this);
+
 		return cloneTree;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void loadFromFileWithIntegers(String filename) throws FileNotFoundException {
+
+		File fileFromWhichDataWillBeRead = new File(filename);
+
+		DataInputStream streamWhichWillExtractTheDataOutOfTheFile = null;
+
+		if (fileFromWhichDataWillBeRead.exists()) {
+
+			try {
+				streamWhichWillExtractTheDataOutOfTheFile = new DataInputStream(
+						new BufferedInputStream(new FileInputStream(fileFromWhichDataWillBeRead)));
+
+				int remaining = streamWhichWillExtractTheDataOutOfTheFile.available();
+
+				while (remaining != 0) {
+					Integer current = streamWhichWillExtractTheDataOutOfTheFile.readInt();
+					this.insert((T)current);
+					remaining = streamWhichWillExtractTheDataOutOfTheFile.available();
+					System.out.println("Succes");
+				}
+
+			}
+
+			catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+
+		}
+
+		else {
+
+			throw new FileNotFoundException();
+
+		}
+
 	}
 
 	@Override
 	public void saveToFile(String filename) throws IOException {
 		List<T> valuesAsList = this.asList();
-		File toBeSaved = new File(filename);
-		DataOutputStream os = null;
 
-		if (!toBeSaved.exists()) {
+		File fileIntoWhichTheDataWillBeSaved = new File(filename);
+
+		DataOutputStream streamWhichWillDeliverTheDataIntoTheFile = null;
+
+		if (!fileIntoWhichTheDataWillBeSaved.exists()) {
+
 			try {
-				toBeSaved.createNewFile();
-			} catch (IOException e) {
+
+				fileIntoWhichTheDataWillBeSaved.createNewFile();
+
+			}
+
+			catch (IOException e) {
+
 				e.printStackTrace();
+
 			}
+
 		}
+
 		try {
-			os = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(toBeSaved)));
+			streamWhichWillDeliverTheDataIntoTheFile = new DataOutputStream(
+					new BufferedOutputStream(new FileOutputStream(fileIntoWhichTheDataWillBeSaved)));
+
 			for (T valuesAsNumber : valuesAsList) {
-				os.writeInt(valuesAsNumber.intValue());
+
+				streamWhichWillDeliverTheDataIntoTheFile.writeInt(valuesAsNumber.intValue());
+
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+
+		catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+
 		finally {
-			os.close();
+
+			streamWhichWillDeliverTheDataIntoTheFile.close();
+
 			System.out.println("Saved");
 		}
 
 	}
 
 	public void saveAsObject(String filename) {
-		File toBeSaved = new File(filename);
-		if (!toBeSaved.exists()) {
+		File theFileInWhichTheDataWillBeSaved = new File(filename);
+
+		if (!theFileInWhichTheDataWillBeSaved.exists()) {
+
 			try {
-				toBeSaved.createNewFile();
-			} catch (IOException e) {
+
+				theFileInWhichTheDataWillBeSaved.createNewFile();
+			}
+
+			catch (IOException e) {
+
 				e.printStackTrace();
 			}
+
 		}
+
 		try {
-			FileOutputStream fs = new FileOutputStream(toBeSaved);
+
+			FileOutputStream fs = new FileOutputStream(theFileInWhichTheDataWillBeSaved);
+
 			ObjectOutputStream os = new ObjectOutputStream(fs);
+
 			os.writeObject(this);
+
 			os.close();
+
 			fs.close();
+
 			System.out.println("The object has been saved");
 
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+
+		catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+
 	}
 
 	@Override
